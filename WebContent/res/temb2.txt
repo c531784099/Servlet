@@ -1,0 +1,118 @@
+private void parseRequest(SocketInputStream input, OutputStream output)
+
+throws IOException, ServletException {
+	
+// Parse the incoming request line
+input.readRequestLine(requestLine);
+
+
+String method =new String(requestLine.method, 0, requestLine.methodEnd);
+String uri = null;
+String protocol = new String(requestLine.protocol, 0,requestLine.protocolEnd);
+// Validate the incoming request line
+if (method, length () < 1) {
+throw new ServletException("Missing HTTP request method");
+}
+else if (requestLine.uriEnd < 1) {
+throw new ServletException("Missing HTTP request URI");
+}
+// Parse any query parameters out of the request URI
+int question = requestLine.indexOf("?");
+if (question >= 0) {
+request.setQueryString(new String(requestLine.uri, question + 1,requestLine.uriEnd - question - 1));
+uri = new String(requestLine.uri, 0, question);
+}
+else {
+request.setQueryString(null);
+uri = new String(requestLine.uri, 0, requestLine.uriEnd);
+}
+// Checking for an absolute URI (with the HTTP protocol)
+if (!uri.startsWith("/")) {
+int pos = uri.indexOf("://");
+// Parsing out protocol and host name
+if (pos != -1) {
+pos = uri.indexOf('/', pos + 3);
+if (pos == -1) {
+uri = "";
+}
+else {
+uri = uri.substring(pos);
+}
+}
+}
+// Parse any requested session ID out of the request URI
+String match = ";jsessionid=";
+int semicolon = uri.indexOf(match);
+if (semicolon >= 0) {
+String rest = uri.substring(semicolon + match,length());
+int semicolon2 = rest.indexOf(';');
+if (semicolon2 >= 0) {
+request.setRequestedSessionId(rest.substring(0, semicolon2));
+rest = rest.substring(semicolon2);
+}
+else {
+request.setRequestedSessionId(rest);
+rest = "";
+}
+request.setRequestedSessionURL(true);
+uri = uri.substring(0, semicolon) + rest;
+}
+else {
+request.setRequestedSessionId(null);
+request.setRequestedSessionURL(false);
+}
+// Normalize URI (using String operations at the moment)
+String normalizedUri = normalize(uri);
+// Set the corresponding request properties
+((HttpRequest) request).setMethod(method);
+request.setProtocol(protocol);
+if (normalizedUri != null) {
+((HttpRequest) request).setRequestURI(normalizedUri);
+}
+else {
+((HttpRequest) request).setRequestURI(uri);
+}
+if (normalizedUri == null) {
+throw new ServletException("Invalid URI: " + uri + "'");
+}
+}
+	/*parseRequest 方法首先调用 SocketInputStream 类的 readRequestLine 方法：
+	input.readRequestLine(requestLine);
+	在这里 requestLine 是 HttpProcessor 里边的 HttpRequestLine 的一个实例：
+	private HttpRequestLine requestLine = new HttpRequestLine();
+	调用它的 readRequestLine 方法来告诉 SocketInputStream 去填入 HttpRequestLine 实例。
+	接下去，parseRequest 方法获得请求行的方法，URI 和协议：*/
+String method =new String(requestLine.method, 0, requestLine.methodEnd);
+String uri = null;
+String protocol = new String(requestLine.protocol, 0, requestLine.protocolEnd);
+	/*不过，在 URI 后面可以有查询字符串，假如存在的话，查询字符串会被一个问好分隔开来。
+	因此，parseRequest 方法试图首先获取查询字符串。并调用 setQueryString 方法来填充
+	HttpRequest 对象：*/
+	// Parse any query parameters out of the request URI
+int question = requestLine.indexOf("?");
+if (question >= 0) { // there is a query string.
+request.setQueryString(new String(requestLine.uri, question + 1,requestLine.uriEnd - question - 1));
+uri = new String(requestLine.uri, 0, question);
+}
+else {
+request.setQueryString (null);
+uri = new String(requestLine.uri, 0, requestLine.uriEnd);
+}
+	/*不过，大多数情况下，URI 指向一个相对资源，URI 还可以是一个绝对值，就像下面所示：
+	http://www.brainysoftware.com/index.html?name=Tarzan
+	parseRequest 方法同样也检查这种情况：*/
+	// Checking for an absolute URI (with the HTTP protocol)
+if (!uri.startsWith("/")) {
+// not starting with /, this is an absolute URI
+int pos = uri.indexOf("://");
+// Parsing out protocol and host name
+if (pos != -1) {
+pos = uri.indexOf('/', pos + 3);
+if (pos == -1) {
+uri = "";
+}
+else {
+uri = uri.substring(pos);
+}
+}
+}

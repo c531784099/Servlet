@@ -1,0 +1,10 @@
+filter:
+	1、filter的过滤顺序是按照在web.xml中的顺序逐级过滤的。
+	2、可以直接配置<filter-maping> 
+					<filter-name></filter-name>
+					<sevlet-name>这里是直接的servlet的name、这样就只定义了这个过滤器只是处理指定的servlet类</servlet-name>
+				  <filter-mapping>
+	3、filter的url-pattern 设置的路径、只有匹配到的请求路径才会经过过滤器。
+	<dispatcher>REQUEST</dispatcher> //请求转发的 数据同样会使用一次过滤器。
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>

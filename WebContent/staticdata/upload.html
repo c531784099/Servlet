@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Upload</title>
+</head>
+<body>
+<!-- 这里的enctype指明的是 数据回发到服务器时 数据的类型。这里是二进制数据类型 -->
+<form action="../upload_up" method="post" enctype="multipart/form-data" name="uploadform">
+<!-- 第二种写法   action="/servletstudy/upload_up" -->
+<table>
+	<tr>
+	<td><div align="right">User Name:</div></td>
+	<td><input type="text" name="username" size="30"/></td>
+	</tr>
+	<!-- 以下type 类型代表 非表单域 非formfield -->
+	<tr>
+	<td><div align="right">Upload File1:</div></td>
+	<td><input type="file" name="file1" size="30"/></td>
+	</tr>
+	<tr>
+	<td><div align="right">Upload File2:</div></td>
+	<td><input type="file" name="file2" size="30"/></td>
+	</tr>
+	<tr>
+	<td><input type="submit" name="submit" value="upload"/></td>
+	<td><input type="reset" name="reset" value="reset"></td>
+	</tr>
+</table>
+</form>
+</body>
+</html>

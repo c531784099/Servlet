@@ -1,0 +1,2 @@
+测试从服务器上下载的访问路径：     127.0.0.1:8080/servletstudy/upload?filename=temb2.txt
+其中这里的资源文件需要放在服务器的管理目录下。

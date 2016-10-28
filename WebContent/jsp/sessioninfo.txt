@@ -1,0 +1,17 @@
+1、会话可以持久化：{搁置&激活}
+2、应用被终止、tomcat服务器被终止都会搁置、持久化httpsession 其中的属性所属的类需要实现serialzable接口  否则不能持久化。
+3、PersistentManager 有两个实现类  FileStore和JDBCStore 第一个是保存在文件中、一个Httpsession一个文件
+   另外一个是保存在数据库中、{需要配置参数【context.xml中配置】}
+   
+   5、会话监听器
+   		1、定义了4个用于监听会话各种事件的接口
+   			1、HttpsessionListener：{会话的创建、销毁}  {需要在web.xml中配置}
+   			2、HttpsessionAttributeListener{会话属性的加入、删除、修改值}{需要在web.xml中配置}
+   			3、HttpSessionBindingListener{会话和属性的绑定、解除绑定\针对的是对象value  这个对象需要实现该接口、这样才会触发实现的方法}
+   			4、HttpSessionActivationListener{搁置、持久化、监听会话属性中的value：如果要监控某个对象搁置或者激活事件 必须实现该接口}
+   			
+   	我们使用  Listener  需要我们实现 所使用的Listener接口  定义自己相关的实现。
+   	httpsession是 tomcat 容器创建的。
+   
+   所谓的tomcat组件  就算一个网页也算是 一个组件。			
+   			
